@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-05-16
+
+### Added
+- PlayerAnimator (by KosmX) is now a required dependency. TacZ's
+  third-person gun pose internally branches: with PlayerAnimator it
+  plays a full-body animation (body tilt, leg stance, kneeling crouch),
+  otherwise it falls back to an arm-only pose. 0.3.0 only restored the
+  arm-only fallback under Epic Fight; this version restores the full
+  body animation by ensuring PlayerAnimator is always loaded.
+
+### Notes
+- This adds a third mandatory mod to the runtime requirements
+  (TacZ + Epic Fight + PlayerAnimator). Players who do not want
+  PlayerAnimator should stay on 0.3.0, which produces the arm-only
+  pose without that dependency.
+
+## [0.3.0] - 2026-05-16
+
+### Fixed
+- Third-person view now keeps TacZ's gun-holding pose while Epic Fight
+  is installed. Previously, even after the patch forced Epic Fight into
+  vanilla mode, TacZ's third-person `HumanoidModel` pose was being lost
+  somewhere between `setupAnim` and the final render, leaving the
+  player with the default vanilla walking animation.
+
+### Added
+- New Mixin `HumanoidModelMixin` (priority 1500) that injects after
+  TacZ's own `HumanoidModel.setupAnim` TAIL hook and re-invokes
+  `InnerThirdPersonManager.setRotationAnglesHead` for any player
+  holding a TacZ gun. This is gated to players only — every other
+  `LivingEntity` short-circuits immediately.
+
+### Changed
+- Project no longer claims to be Mixin-free. A new `mixins.json`
+  (`epictaczcompat.mixins.json`) is declared from `neoforge.mods.toml`
+  with a single client-side mixin.
+
 ## [0.2.0] - 2026-05-16
 
 ### Fixed

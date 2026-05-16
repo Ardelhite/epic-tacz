@@ -93,6 +93,11 @@ dependencies {
 
     // EpicFight (CurseForge project ID 405076)
     implementation "curse.maven:epic-fight-mod-405076:7956628"
+
+    // PlayerAnimator by KosmX (CurseForge project ID 658587).
+    // TacZ delegates full-body third-person gun animation to this library;
+    // without it, only the arm pose is restored.
+    implementation "curse.maven:playeranimator-658587:${playeranimator_file_id}"
 }
 
 // Expand metadata replacements for the template neoforge.mods.toml

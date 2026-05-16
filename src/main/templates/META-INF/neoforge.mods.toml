@@ -3,6 +3,9 @@ loaderVersion="${loader_version_range}"
 license="${mod_license}"
 issueTrackerURL="https://github.com/Ardelhite/epic-tacz/issues"
 
+[[mixins]]
+config="epictaczcompat.mixins.json"
+
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
@@ -40,5 +43,14 @@ side="CLIENT"
 modId="epicfight"
 type="required"
 versionRange="[21.0.0,)"
+ordering="AFTER"
+side="CLIENT"
+
+# TacZ's third-person gun pose delegates to PlayerAnimator when present;
+# without it, only arm rotations are restored (no body tilt, no leg stance).
+[[dependencies.${mod_id}]]
+modId="playeranimator"
+type="required"
+versionRange="[2.0.0,)"
 ordering="AFTER"
 side="CLIENT"
