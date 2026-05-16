@@ -1,0 +1,30 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# NeoForge / ModDevGradle runtime data
+run/
+runs/
+logs/
+
+# IntelliJ IDEA project files (selectively committed via .idea/.gitignore if desired)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse / VSCode
+.classpath
+.project
+.settings/
+bin/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Personal tooling
+CLAUDE.md
+tacz_patch.md
+
