@@ -58,7 +58,7 @@ No asset replacement, no server-side code, no config files.
 | | Version |
 |---|---|
 | Minecraft | 1.21.1 |
-| NeoForge | 21.1.228 or newer |
+| NeoForge | 21.1.222 or newer |
 | TacZ | 1.1.0+ (the [Unofficial NeoForge port][TacZ]) |
 | Epic Fight | 21.0.0+ |
 | PlayerAnimator | 2.0.0+ |
