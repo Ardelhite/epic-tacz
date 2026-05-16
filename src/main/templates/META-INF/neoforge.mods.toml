@@ -8,6 +8,8 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="ImperialArchitects"
+# Client-only patch: nothing to do on a dedicated server.
+side="CLIENT"
 description='''
 EpicFightとTacZを併用した際に一人称視点でTacZの銃アニメーションが描画されない問題を回避する互換パッチMOD。
 TacZの銃を保持している間、EpicFightのバトルモードへの遷移を抑制し、自動的に通常モードに戻す。
@@ -32,11 +34,11 @@ modId="tacz"
 type="required"
 versionRange="[1.1.0,)"
 ordering="AFTER"
-side="BOTH"
+side="CLIENT"
 
 [[dependencies.${mod_id}]]
 modId="epicfight"
 type="required"
 versionRange="[21.0.0,)"
 ordering="AFTER"
-side="BOTH"
+side="CLIENT"
