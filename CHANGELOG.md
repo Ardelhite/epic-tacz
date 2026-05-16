@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1201-0.5.0] - 2026-05-16
+
+### Added
+- Backport to **Minecraft 1.20.1 / Forge 47.4.10**. Behaviour matches
+  the 1.21.1/NeoForge 0.4.0 release (first-person tick patch +
+  third-person `HumanoidModel` mixin + PlayerAnimator as a required
+  dependency).
+
+### Notes
+- This is a separate distribution from the 1.21.1/NeoForge build.
+  Version string is prefixed with `1201-` so CurseForge and clients
+  can tell the two apart.
+- Targets TacZ 1.1.8 (1.20.1 Forge port — Modrinth slug
+  `timeless-and-classics-zero`), EpicFight `20.14.17-mc1.20.1-forge`,
+  and PlayerAnimator `1.0.2-rc1+1.20` (Forge).
+
 ## [0.4.0] - 2026-05-16
 
 ### Added
