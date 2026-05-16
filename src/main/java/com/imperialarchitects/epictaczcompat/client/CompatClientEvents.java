@@ -5,9 +5,9 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
@@ -23,18 +23,19 @@ public final class CompatClientEvents {
     private CompatClientEvents() {}
 
     public static void register() {
-        NeoForge.EVENT_BUS.register(CompatClientEvents.class);
+        MinecraftForge.EVENT_BUS.register(CompatClientEvents.class);
     }
 
     @SubscribeEvent
-    public static void onClientTickPost(ClientTickEvent.Post event) {
+    public static void onClientTickPost(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) return;
 
         if (!isHoldingGun(player)) return;
 
-        LocalPlayerPatch patch = EpicFightCapabilities.getCachedLocalPlayerPatch();
+        LocalPlayerPatch patch = EpicFightCapabilities.getLocalPlayerPatch(player);
         if (patch == null) return;
 
         if (!patch.isEpicFightMode()) return;
