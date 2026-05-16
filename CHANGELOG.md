@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-05-16
+
+### Fixed
+- Third-person view now keeps TacZ's gun-holding pose instead of falling
+  back to the vanilla walking animation. Previously, `toVanillaMode(true)`
+  was unintentionally forcing the camera to `FIRST_PERSON` every tick via
+  Epic Fight's `autoPerspectiveSwithing` config, snapping players out of
+  third person before TacZ's `HumanoidModel` mixin could render the pose.
+
+### Changed
+- The tick handler now snapshots the camera type before calling
+  `LocalPlayerPatch.toVanillaMode` and restores it afterwards, so manual
+  F5 perspective changes are preserved.
+- Switched the `toVanillaMode` dispatch flag from `true` to `false`,
+  avoiding redundant `CPChangePlayerMode` packets to the server every
+  tick while a gun is held.
+
 ## [0.1.1] - 2026-05-16
 
 ### Changed

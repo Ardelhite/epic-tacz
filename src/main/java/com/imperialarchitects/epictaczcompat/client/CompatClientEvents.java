@@ -1,6 +1,7 @@
 package com.imperialarchitects.epictaczcompat.client;
 
 import com.tacz.guns.api.item.IGun;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +12,12 @@ import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerP
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 /// EpicFightのバトルモードがONになるとTacZの一人称銃モデルが描画されない。
-/// 銃をメインハンドに持っている間、毎tickバトルモードをvanilla(通常)に強制する。
+/// また三人称ではTacZのHumanoidModel Mixinが効かずバニラ姿勢になる。
+/// 銃を持っている間、毎tickバトルモードをvanillaに戻すことで両視点でTacZの挙動を保つ。
+///
+/// 注意: EpicFightの `toVanillaMode` は `autoPerspectiveSwithing` 設定下で
+/// 内部的にカメラを FIRST_PERSON へ強制する副作用を持つため、呼び出し前後で
+/// カメラタイプを save/restore する。これにより三人称中も視点が維持される。
 public final class CompatClientEvents {
 
     private CompatClientEvents() {}
@@ -22,7 +28,8 @@ public final class CompatClientEvents {
 
     @SubscribeEvent
     public static void onClientTickPost(ClientTickEvent.Post event) {
-        LocalPlayer player = Minecraft.getInstance().player;
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
         if (player == null) return;
 
         if (!isHoldingGun(player)) return;
@@ -30,8 +37,13 @@ public final class CompatClientEvents {
         LocalPlayerPatch patch = EpicFightCapabilities.getCachedLocalPlayerPatch();
         if (patch == null) return;
 
-        if (patch.isEpicFightMode()) {
-            patch.toVanillaMode(true);
+        if (!patch.isEpicFightMode()) return;
+
+        CameraType preCamera = mc.options.getCameraType();
+        // dispatch=false: サーバへのモード変更パケットを毎tick送らない
+        patch.toVanillaMode(false);
+        if (mc.options.getCameraType() != preCamera) {
+            mc.options.setCameraType(preCamera);
         }
     }
 
