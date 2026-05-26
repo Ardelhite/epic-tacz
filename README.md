@@ -1,9 +1,15 @@
 # Epic Fight × TacZ Compat
 
-A client-only compatibility patch for **Minecraft 1.21.1 / NeoForge**
-that restores TacZ's gun animations — both first-person (reload,
-inspect, draw) and third-person (gun-holding pose, body tilt, leg
-stance) — when [Epic Fight] is installed alongside [TacZ].
+A client-only compatibility patch that restores TacZ's gun animations
+— both first-person (reload, inspect, draw) and third-person
+(gun-holding pose, body tilt, leg stance) — when [Epic Fight] is
+installed alongside [TacZ].
+
+**Two builds are published, one per Minecraft version.** Pick the jar
+that matches your Minecraft / mod-loader combination:
+
+- **1.21.1 / NeoForge** — the primary target.
+- **1.20.1 / Forge** — backport, same behaviour.
 
 > **TacZ**, **Epic Fight**, and **PlayerAnimator** are all required.
 > The mod will refuse to load without them — it has no purpose on its own.
@@ -55,19 +61,25 @@ No asset replacement, no server-side code, no config files.
 
 ## Requirements
 
-| | Version |
-|---|---|
-| Minecraft | 1.21.1 |
-| NeoForge | 21.1.222 or newer |
-| TacZ | 1.1.0+ (the [Unofficial NeoForge port][TacZ]) |
-| Epic Fight | 21.0.0+ |
-| PlayerAnimator | 2.0.0+ |
+Pick the row that matches the jar you downloaded.
+
+| Build | Minecraft | Mod loader | TacZ | Epic Fight | PlayerAnimator |
+|---|---|---|---|---|---|
+| **1.21.1** | 1.21.1 | NeoForge 21.1.222+ | 1.1.0+ ([Unofficial NeoForge port][TacZ]) | 21.0.0+ | 2.0.0+ |
+| **1.20.1** | 1.20.1 | Forge 47.4.10+ (range `[47,)`) | 1.1.8 | 20.14.17 (CurseForge file `8049910`, `20.14.17-mc1.20.1-forge`) | 1.0.2-rc1+1.20 (CurseForge file `4587214`) |
+
+Downloads are published per Minecraft version — make sure the jar
+filename matches your Minecraft version before dropping it into
+`mods/`. Mixing a 1.21.1 build into a 1.20.1 instance (or vice versa)
+will not load.
 
 ## Installation
 
-1. Install NeoForge for Minecraft 1.21.1.
-2. Drop **TacZ**, **Epic Fight**, **PlayerAnimator**, and **this jar**
-   into your `mods/` folder.
+1. Install the matching mod loader for your Minecraft version
+   (NeoForge for 1.21.1, Forge for 1.20.1).
+2. Drop **TacZ**, **Epic Fight**, **PlayerAnimator**, and **the
+   version-matching build of this mod** into your `mods/` folder.
+   All four mods must be on the same Minecraft version.
 3. Launch. TacZ animations should play normally in both first and
    third person while a gun is equipped, and Epic Fight stances work
    as usual for everything else.

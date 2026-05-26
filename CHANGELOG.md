@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+This changelog tracks the **1.21.1 / NeoForge** codebase on `main`. The
+**1.20.1 / Forge** backport ships as a separate jar with the same
+behaviour; pinned dependencies for that build are listed in the
+README's Requirements table.
+
+## [1.20.1 backport] - 2026-05-17
+
+### Added
+- Initial 1.20.1 / Forge backport published. Same fix as the 1.21.1
+  build (first-person tick patch + third-person `HumanoidModel.setupAnim`
+  TAIL mixin + PlayerAnimator as a required dependency), rebuilt
+  against Forge 47.4.10+, TacZ 1.1.8, Epic Fight `20.14.17-mc1.20.1-forge`
+  (CurseForge file `8049910`), and PlayerAnimator `1.0.2-rc1+1.20`
+  (CurseForge file `4587214`). Downloads are split per Minecraft
+  version — the 1.21.1 jar will not load on 1.20.1 and vice versa.
+
 ## [0.5.0] - 2026-05-16
 
 ### Changed
