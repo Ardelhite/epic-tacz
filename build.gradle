@@ -20,6 +20,21 @@ tasks.named('jar', Jar) {
     archiveFileName = "${mod_id}_${minecraft_version}_${mod_version}.jar"
 }
 
+// 配布 jar の健全性チェック。1201 ブランチの src/main/resources/META-INF/mods.toml が
+// 作業ツリーに残ったまま 0.5.0 が出荷され、Forge 用の mods.toml が同梱された前例があるため。
+tasks.named('jar', Jar).configure {
+    doLast {
+        new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { zip ->
+            if (zip.getEntry('META-INF/neoforge.mods.toml') == null) {
+                throw new GradleException('jar に META-INF/neoforge.mods.toml が入っていません')
+            }
+            if (zip.getEntry('META-INF/mods.toml') != null) {
+                throw new GradleException('NeoForge 用 jar に Forge 用の META-INF/mods.toml が混入しています')
+            }
+        }
+    }
+}
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 repositories {
@@ -106,6 +121,7 @@ var generateModMetadata = tasks.register('generateModMetadata', ProcessResources
             minecraft_version      : minecraft_version,
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
             loader_version_range   : loader_version_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,

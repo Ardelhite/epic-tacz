@@ -10,6 +10,30 @@ This changelog tracks the **1.21.1 / NeoForge** codebase on `main`. The
 behaviour; pinned dependencies for that build are listed in the
 README's Requirements table.
 
+## [0.5.1] - 2026-08-09
+
+### Fixed
+- Third-person gun pose no longer plays the walking lower-body
+  animation while standing still. The `HumanoidModel.setupAnim` TAIL
+  inject was passing `ageInTicks` to
+  `InnerThirdPersonManager.setRotationAnglesHead` where TacZ passes
+  `limbSwingAmount`; TacZ's `playLowerAnimation` uses that value for
+  its `> 0.05` walk check, so the walk animation was always selected.
+- The published 0.5.0 jar shipped a stray Forge-style
+  `META-INF/mods.toml` (leaked from the 1.20.1 backport's working
+  tree). NeoForge ignores it — only `neoforge.mods.toml` is read — but
+  it is now removed, and the `jar` task fails the build if it ever
+  reappears.
+
+### Changed
+- Relaxed the required NeoForge range from `[21.1.222,)` to `[21.1,)`.
+  The patch uses no 21.1.222+ API, while 218 of the 241 published
+  21.1.x builds are older than 21.1.222 — those installs were being
+  rejected at startup with a mod-loading error screen that users
+  reported as a crash.
+- `@Shadow` fields in the mixin are now marked `@Final`, matching
+  TacZ's own `HumanoidModelMixin` and the target fields.
+
 ## [1.20.1 backport] - 2026-05-17
 
 ### Added

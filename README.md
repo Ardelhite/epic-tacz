@@ -71,7 +71,7 @@ No asset replacement, no server-side code, no config files.
 | | Version |
 |---|---|
 | Minecraft | 1.21.1 |
-| NeoForge | 21.1.228 or newer |
+| NeoForge | any 21.1.x (built against 21.1.222) |
 | TacZ | 1.1.0+ (the [Unofficial NeoForge port][TacZ-1211]) |
 | Epic Fight | 21.0.0+ |
 | PlayerAnimator | 2.0.0+ |
@@ -93,7 +93,7 @@ above are verified to work with each build.
 ## Installation
 
 1. Install the matching loader for your Minecraft version
-   (NeoForge 21.1.228+ for 1.21.1, or Forge 47.4.10+ for 1.20.1).
+   (any NeoForge 21.1.x for 1.21.1, or Forge 47.4.10+ for 1.20.1).
 2. Drop **TacZ**, **Epic Fight**, **PlayerAnimator**, and **this jar**
    (the one matching your Minecraft version) into your `mods/` folder.
 3. Launch. TacZ animations should play normally in both first and
