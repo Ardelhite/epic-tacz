@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1201-0.5.1] - 2026-08-09
+
+### Fixed
+- **Startup crash.** `1201-0.5.0` shipped without its Mixin refmap and
+  with the `@Shadow` fields left under Mojang names, so in production
+  Mixin failed with
+  `@Shadow field head was not located in the target class
+  net.minecraft.client.model.HumanoidModel. No refMap loaded.`
+  and the game died during mod loading — before the main menu.
+  (Reported as [#1](https://github.com/Ardelhite/epic-tacz/issues/1)
+  and on CurseForge.)
+  Root cause: `org.gradle.caching=true` let Gradle restore `compileJava`
+  from the build cache, which skips MixinGradle's annotation processor.
+  The AP writes the refmap and the reobf mapping outside `compileJava`'s
+  declared outputs, so both silently vanished from the artifact.
+  `compileJava` is now excluded from the build cache, and a new
+  `verifyMixinArtifact` task fails the build if the packaged jar is
+  missing its refmap or still carries unmapped `@Shadow` names.
+- Third-person gun pose no longer plays the walking lower-body
+  animation while standing still: the `setupAnim` TAIL inject was
+  passing `ageInTicks` where TacZ passes `limbSwingAmount`, and TacZ
+  uses that value for its `> 0.05` walk check.
+
+### Changed
+- `@Shadow` fields are now marked `@Final`, matching TacZ's own
+  `HumanoidModelMixin` and the target fields.
+- `src/main/resources/META-INF/mods.toml` is now tracked in git. It
+  never was, so `1201-0.5.0` was built from an untracked working-tree
+  file; a fresh clone produced a jar with no mod manifest at all.
+  `verifyMixinArtifact` now also rejects a jar without `mods.toml` or
+  with unexpanded `${...}` placeholders in it.
+
 ## [1201-0.5.0] - 2026-05-16
 
 ### Added

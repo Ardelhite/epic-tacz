@@ -74,6 +74,56 @@ mixin {
     config "${mod_id}.mixins.json"
 }
 
+// MixinGradle の annotation processor は refmap と reobf 用の追加マッピングを
+// compileJava の宣言済み出力の外 (build/tmp/compileJava/) に書き出す。
+// build cache から compileJava が復元されるとそれらが生成されず、
+// refmap 欠落 + @Shadow が Mojang 名のままの jar が出来上がるため、
+// このタスクだけキャッシュを無効化する。
+tasks.named('compileJava', JavaCompile).configure {
+    outputs.cacheIf { false }
+}
+
+// 0.5.0 は増分ビルドで Mixin の AP が走らないまま出荷され、refmap 欠落 +
+// @Shadow フィールドが Mojang 名のままの jar になり、production では
+// "@Shadow field head was not located in the target class" で起動時に落ちた。
+// 同じ事故を防ぐため、reobf 後の jar を検証してから build を通す。
+var verifyMixinArtifact = tasks.register('verifyMixinArtifact') {
+    dependsOn tasks.named('reobfJar')
+    var jarFile = tasks.named('jar', Jar).flatMap { it.archiveFile }
+    inputs.file jarFile
+    doLast {
+        new java.util.zip.ZipFile(jarFile.get().asFile).withCloseable { zip ->
+            var modsToml = zip.getEntry('META-INF/mods.toml')
+            if (modsToml == null) {
+                throw new GradleException('jar に META-INF/mods.toml が入っていません。')
+            }
+            if (zip.getInputStream(modsToml).text.contains('${')) {
+                throw new GradleException('mods.toml のプレースホルダが展開されていません。')
+            }
+            var refmap = zip.getEntry("${mod_id}.refmap.json")
+            if (refmap == null) {
+                throw new GradleException("${mod_id}.refmap.json が jar にありません。" +
+                        " './gradlew clean build' で Mixin の annotation processor を走らせ直してください。")
+            }
+            if (!zip.getInputStream(refmap).text.contains('HumanoidModelMixin')) {
+                throw new GradleException('refmap に HumanoidModelMixin のマッピングがありません。')
+            }
+            var mixinClass = zip.getEntry('com/imperialarchitects/epictaczcompat/mixin/HumanoidModelMixin.class')
+            if (mixinClass == null) {
+                throw new GradleException('HumanoidModelMixin.class が jar にありません。')
+            }
+            // reobf 済みなら @Shadow フィールドは SRG 名 (f_1028xx_) になり、
+            // ソース側の名前は定数プールに残らない。
+            var bytecode = new String(zip.getInputStream(mixinClass).bytes, 'ISO-8859-1')
+            if (bytecode.contains('leftArm')) {
+                throw new GradleException('@Shadow フィールドが SRG 名に reobf されていません。' +
+                        " './gradlew clean build' でビルドし直してください。")
+            }
+        }
+    }
+}
+tasks.named('build').configure { dependsOn verifyMixinArtifact }
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
