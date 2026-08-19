@@ -10,7 +10,7 @@ This changelog tracks the **1.21.1 / NeoForge** codebase on `main`. The
 behaviour; pinned dependencies for that build are listed in the
 README's Requirements table.
 
-## [0.5.2] - 2026-08-19
+## [0.5.2] - 2026-08-20
 
 ### Fixed
 - **Epic Fight battle mode stayed off after putting a gun away.** Holding
