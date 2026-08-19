@@ -3,6 +3,7 @@ package com.imperialarchitects.epictaczcompat.mixin;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.animation.third.InnerThirdPersonManager;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -33,6 +34,11 @@ public abstract class HumanoidModelMixin {
                                                 float ageInTicks, float netHeadYaw, float headPitch,
                                                 CallbackInfo ci) {
         if (ageInTicks == 0f) return;
+        // 対象は三人称のプレイヤーモデルのみ。EpicFight の WearableItemLayer は
+        // 防具モデル(素の HumanoidModel)に対しても setupAnim を呼ぶため、絞らないと
+        // 防具スロットの数だけ PlayerAnimator のアニメ再生が毎フレーム走ってしまう。
+        // Mob(ゾンビ等)のモデルも同じ理由で除外する。
+        if (!((Object) this instanceof PlayerModel<?>)) return;
         if (!(entity instanceof Player)) return;
         if (!(entity.getMainHandItem().getItem() instanceof IGun)) return;
 

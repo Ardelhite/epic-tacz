@@ -28,3 +28,6 @@ bin/
 CLAUDE.md
 tacz_patch.md
 
+
+# Playwright MCP scratch output
+.playwright-mcp/
