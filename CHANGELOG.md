@@ -24,6 +24,16 @@ README's Requirements table.
   as soon as the gun is no longer held. The camera type is still
   preserved, but only on the tick the mode actually flips, so it no
   longer competes with normal F5 perspective changes.
+- **Epic Fight emotes did nothing.** The emote wheel opened, the emote
+  played internally, and nothing was drawn. Epic Fight emotes are
+  `EmoteAnimation`s played on Epic Fight's own armature, and with the
+  default `enable_player_vanilla_model = true` that armature is only
+  rendered while the player is in battle mode. Being pinned in vanilla
+  mode by the bug above therefore made every emote invisible,
+  regardless of the held item. Fixed by the battle-mode restore, plus
+  battle mode is no longer suppressed while an `EmoteAnimation` is
+  playing, so emotes also work with a gun in hand. Epic Fight builds
+  without emote support are detected and skipped.
 - The `HumanoidModel.setupAnim` TAIL inject now only runs on
   `PlayerModel`. Epic Fight's `WearableItemLayer` calls `setupAnim` on
   armor models too — a call site vanilla never uses — which made the

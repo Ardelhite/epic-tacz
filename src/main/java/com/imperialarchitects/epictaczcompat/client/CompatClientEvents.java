@@ -57,8 +57,34 @@ public final class CompatClientEvents {
         epicFightModeBefore = patch.isEpicFightMode();
         cameraBefore = mc.options.getCameraType();
 
-        if (isHoldingGun(player)) {
+        if (isHoldingGun(player) && !isPlayingEmote(patch)) {
             event.cancel();
+        }
+    }
+
+    /// EpicFightのエモートは EpicFight 自前の armature に対して再生されるので、
+    /// バニラモードのままだと再生されても一切描画されない(エモートホイールは
+    /// 開くのに何も起きないように見える)。エモート中だけ抑制を解除する。
+    private static boolean isPlayingEmote(LocalPlayerPatch patch) {
+        Class<?> emoteAnimation = EmoteAnimationClass.VALUE;
+        if (emoteAnimation == null) return false;
+        return emoteAnimation.isInstance(patch.getClientAnimator().getPlayerFor(null).getAnimation().get());
+    }
+
+    /// `EmoteAnimation` は EpicFight のエモート実装が入ったビルドにしか存在しない。
+    /// 本MODは EpicFight `[21.0.0,)` を許容しているので、直接参照すると古いビルドで
+    /// NoClassDefFoundError になる。解決できなければエモート無しとして扱う。
+    private static final class EmoteAnimationClass {
+        static final Class<?> VALUE = resolve();
+
+        private static Class<?> resolve() {
+            try {
+                return Class.forName("yesman.epicfight.api.animation.types.EmoteAnimation");
+            } catch (ClassNotFoundException e) {
+                EpicTaczCompat.LOGGER.info("[{}] Epic Fight has no emote support on this build - emote handling disabled",
+                        EpicTaczCompat.MODID);
+                return null;
+            }
         }
     }
 
