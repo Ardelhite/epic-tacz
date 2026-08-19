@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1201-0.5.2] - 2026-08-19
+
+### Fixed
+- **Epic Fight battle mode stayed off after putting a gun away.** Holding
+  a TacZ gun forced the player into vanilla mode every tick, but nothing
+  ever restored battle mode, so switching back to a sword left the skill
+  UI and Epic Fight combat disabled until the mode key was pressed by
+  hand. (Reported on CurseForge.)
+  The suppression now goes through Epic Fight's own
+  `BattleModeSustainableEvent`: cancelling it makes `PlayerPatch.tick`
+  set `battleModeRestricted`, and Epic Fight restores battle mode itself
+  as soon as the gun is no longer held. The camera type is still
+  preserved, but only on the tick the mode actually flips, so it no
+  longer competes with normal F5 perspective changes.
+- The `HumanoidModel.setupAnim` TAIL inject now only runs on
+  `PlayerModel`. Epic Fight's `WearableItemLayer` calls `setupAnim` on
+  armor models too — a call site vanilla never uses — which made the
+  third-person gun animation code, and with it PlayerAnimator playback,
+  run once per equipped armor slot per frame while in battle mode. Mob
+  models (zombies, skeletons, armor stands) are excluded for the same
+  reason.
+
 ## [1201-0.5.1] - 2026-08-09
 
 ### Fixed
