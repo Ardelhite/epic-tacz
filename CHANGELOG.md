@@ -19,13 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as soon as the gun is no longer held. The camera type is still
   preserved, but only on the tick the mode actually flips, so it no
   longer competes with normal F5 perspective changes.
-- The `HumanoidModel.setupAnim` TAIL inject now only runs on
-  `PlayerModel`. Epic Fight's `WearableItemLayer` calls `setupAnim` on
-  armor models too — a call site vanilla never uses — which made the
-  third-person gun animation code, and with it PlayerAnimator playback,
-  run once per equipped armor slot per frame while in battle mode. Mob
-  models (zombies, skeletons, armor stands) are excluded for the same
-  reason.
+- **Worn armor turned invisible.** Epic Fight's `WearableItemLayer`
+  calls `HumanoidModel.setupAnim` on armor models — a call site vanilla
+  never uses — so the third-person gun pose hook was firing once per
+  equipped armor slot, per frame, while in battle mode, and armor
+  stopped being drawn. The `setupAnim` TAIL inject is now limited to
+  `PlayerModel`; mob models (zombies, skeletons, armor stands) are
+  excluded for the same reason. Vanilla and modded armor were both
+  affected, and the armor itself was never lost — only its rendering.
+  Confirmed fixed in testing.
 
 ## [1201-0.5.1] - 2026-08-09
 
