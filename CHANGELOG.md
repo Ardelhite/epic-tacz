@@ -10,7 +10,7 @@ This changelog tracks the **1.21.1 / NeoForge** codebase on `main`. The
 behaviour; pinned dependencies for that build are listed in the
 README's Requirements table.
 
-## [0.6.0] - Unreleased
+## [0.6.0] - 2026-08-29
 
 ### Added
 - **Epic Fight dodge now works while holding a gun.** Battle-mode
