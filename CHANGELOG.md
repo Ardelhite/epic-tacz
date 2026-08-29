@@ -13,6 +13,22 @@ README's Requirements table.
 ## [0.6.0] - Unreleased
 
 ### Added
+- **Epic Fight dodge now works while holding a gun.** Battle-mode
+  suppression used to make the dodge key completely dead with a gun in
+  hand: Epic Fight's `CombatKeyMapping` drops all input to its combat
+  keys outside battle mode, and its skill input handler is gated on
+  `isEpicFightMode()`. The mod now reads the dodge key's physical state
+  directly (GLFW) while suppressed and casts the dodge skill through
+  Epic Fight's public `SkillContainer.sendCastRequest` — the skill
+  pipeline itself (ground/stamina/cooldown checks, server execution)
+  has no mode gate. While the dodge animation plays, suppression is
+  lifted the same way it is for emotes, so the roll renders on Epic
+  Fight's armature and battle-mode suppression resumes automatically
+  when it ends. First-person keeps the TacZ gun view model throughout;
+  the usual dodge requirements (a learned dodge skill, stamina) still
+  apply. If the dodge key shares its physical key with sneak — a setup
+  Epic Fight explicitly supports — the mod does not auto-cast, to keep
+  sneaking with a gun from triggering rolls. (Requested on CurseForge.)
 - **LesRaisins Tactical Equipements (lrtactical) support.** Battle-mode
   suppression now also triggers for items implementing TacZ's
   `IAnimationItem` — the interface lrtactical's melee weapons,
