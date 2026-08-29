@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1201-0.6.0] - Unreleased
+
+### Added
+- **LesRaisins Tactical Equipements (lrtactical) support.** Battle-mode
+  suppression now also triggers for items implementing TacZ's
+  `IAnimationItem` — the interface lrtactical's melee weapons,
+  throwables and consumables use to hook into TacZ's animation system.
+  Holding one of those items previously left Epic Fight's battle mode
+  active from the moment you joined a world (Epic Fight starts in
+  battle mode on 1.20.1), which wiped the item's first-person view
+  model entirely. No new dependency: the check uses only TacZ's public
+  API, and other TacZ-based equipment addons that implement
+  `IAnimationItem` are covered too. Verified in-game with lrtactical
+  0.4.1: the karambit's first-person model now stays rendered while
+  idle and during attacks, battle mode cannot be entered while holding
+  it, and switching to a sword still restores battle mode as usual.
+  (Requested on CurseForge.)
+
 ## [1201-0.5.2] - 2026-08-20
 
 ### Fixed

@@ -1,5 +1,6 @@
 package com.imperialarchitects.epictaczcompat.client;
 
+import com.tacz.guns.api.item.IAnimationItem;
 import com.tacz.guns.api.item.IGun;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -79,10 +80,15 @@ public final class CompatClientEvents {
         }
     }
 
+    /// TacZ の銃 (`IGun`) に加えて、TacZ のアニメーションシステムに乗る外部アドオン装備
+    /// (`IAnimationItem`: LesRaisins Tactical Equipements の近接武器・投擲物など) も対象にする。
+    /// これらもバトルモード中は EpicFight の攻撃アニメに一人称ビューモデルを潰されるため。
     private static boolean isHoldingGun(LocalPlayer player) {
-        ItemStack main = player.getMainHandItem();
-        if (main.getItem() instanceof IGun) return true;
-        ItemStack off = player.getOffhandItem();
-        return off.getItem() instanceof IGun;
+        return isTaczAnimatedItem(player.getMainHandItem())
+                || isTaczAnimatedItem(player.getOffhandItem());
+    }
+
+    private static boolean isTaczAnimatedItem(ItemStack stack) {
+        return stack.getItem() instanceof IGun || stack.getItem() instanceof IAnimationItem;
     }
 }
